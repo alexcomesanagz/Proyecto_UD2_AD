@@ -1,3 +1,4 @@
+import Entidades.Evento;
 import org.hibernate.Session;
 
 public class Main {
@@ -6,6 +7,7 @@ public class Main {
         System.out.println("Test");
 
         Session session = HibernateUtil.get().openSession();
+
 
         session.close();
         System.out.println("Finalizando la conexion a MySQL");
