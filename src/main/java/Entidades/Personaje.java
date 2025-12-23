@@ -1,9 +1,7 @@
 package Entidades;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,6 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class Personaje {
 
     @Id
@@ -19,7 +18,9 @@ public class Personaje {
     @Column(name = "id")
     private int id;
 
+    @NonNull
     private String nombre;
+    @NonNull
     private String alias;
 
 
