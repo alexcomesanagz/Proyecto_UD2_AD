@@ -12,8 +12,8 @@ public class PersonajeRepositorio {
         this.session = session;
     }
 
-    private void crearPersonaje(Personaje personaje){
-        Transaction trx = this.session.beginTransaction();
+    public void crearPersonaje(Personaje personaje){
+        Transaction trx = session.beginTransaction();
 
         session.persist(personaje);
 

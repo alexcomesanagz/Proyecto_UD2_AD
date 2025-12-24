@@ -51,12 +51,13 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         System.out.println("Finalizando la conexion a MySQL");
     }
 
-    private static void crearPersonaje() {
+    public static void crearPersonaje() {
         System.out.println("");
         String nombre = sc.nextLine();
         System.out.println("");
         String alias = sc.nextLine();
-        personajeRepo.crearPersonaje( new Personaje(nombre, alias) );
+        Personaje personaje = new Personaje(nombre, alias);
+        personajeRepo.crearPersonaje( personaje );
     }
 
     private static void showMenu() {
