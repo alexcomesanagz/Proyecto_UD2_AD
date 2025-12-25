@@ -3,24 +3,31 @@ import Entidades.ParticipaId;
 import Entidades.Personaje;
 import Repositorios.*;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.Scanner;
 
 public class Main {
 
     private static Scanner sc = new Scanner(System.in);
+    private static EventoRepositorio eventoRepo;
+    private static HabilidadRepositorio habilidadRepo;
+    private static ParticipaRepositorio participaRepo;
+    private static PersonajeRepositorio personajeRepo;
+    private static TieneHabilidadRepositorio tieneHabilidadRepo;
+    private static TrajeRepositorio trajeRepo;
 
     public static void main(String[] args) {
         System.out.println("Test");
 
         Session session = HibernateUtil.get().openSession();
 
-        EventoRepositorio eventoRepo = new EventoRepositorio(session);
-        HabilidadRepositorio habilidadRepo = new HabilidadRepositorio(session);
-        ParticipaRepositorio participaRepo = new ParticipaRepositorio(session);
-        PersonajeRepositorio personajeRepo = new PersonajeRepositorio(session);
-        TieneHabilidadRepositorio tieneHabilidadRepo = new TieneHabilidadRepositorio(session);
-        TrajeRepositorio trajeRepo = new TrajeRepositorio(session);
+        eventoRepo = new EventoRepositorio(session);
+        habilidadRepo = new HabilidadRepositorio(session);
+        participaRepo = new ParticipaRepositorio(session);
+        personajeRepo = new PersonajeRepositorio(session);
+        tieneHabilidadRepo = new TieneHabilidadRepositorio(session);
+        trajeRepo = new TrajeRepositorio(session);
 
         //menu con funciones y pedida de datos
 
@@ -30,6 +37,14 @@ public class Main {
             opcion = Integer.parseInt(sc.nextLine());
             switch (opcion){
                 case 1 -> crearPersonaje();
+                case 2 -> eliminarPersonaje();
+//                case 1 -> crearPersonaje();
+//                case 1 -> crearPersonaje();
+//                case 1 -> crearPersonaje();
+//                case 1 -> crearPersonaje();
+//                case 1 -> crearPersonaje();
+                case 0 -> System.out.println("Saliendo del programa...");
+                default -> System.out.println();
             }
         }while(opcion!=0);
 
@@ -56,8 +71,13 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         String nombre = sc.nextLine();
         System.out.println("");
         String alias = sc.nextLine();
-        Personaje personaje = new Personaje(nombre, alias);
-        personajeRepo.crearPersonaje( personaje );
+        personajeRepo.crearPersonaje(new Personaje(nombre, alias));
+    }
+
+    public static void eliminarPersonaje() {
+        System.out.println("");
+        int id = Integer.parseInt(sc.nextLine());
+        personajeRepo.eliminarPersonaje(id);
     }
 
     private static void showMenu() {
