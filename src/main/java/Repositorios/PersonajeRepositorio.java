@@ -22,14 +22,14 @@ public class PersonajeRepositorio {
         trx.commit();
     }
 
-    public void eliminarPersonaje(int id) {
+    public void eliminarPersonaje(String nombre) {
         Transaction trx = session.beginTransaction();
-        session.remove(encontrarPorId(id));
+        session.remove(encontrarPorNombre(nombre));
         trx.commit();
     }
-    public Personaje encontrarPorId(int id) {
-        Query query = session.createQuery("SELECT p FROM Personaje p WHERE p.id=:id");
-        query.setParameter(id, ":id");
+    public Personaje encontrarPorNombre(String nombre) {
+        Query query = session.createQuery("SELECT p FROM Personaje p WHERE p.nombre=:nombre");
+        query.setParameter(nombre, ":nombre");
         return (Personaje) query.getSingleResult();
     }
 }

@@ -38,7 +38,7 @@ public class Main {
             switch (opcion){
                 case 1 -> crearPersonaje();
                 case 2 -> eliminarPersonaje();
-//                case 1 -> crearPersonaje();
+                case 3 -> modificarPersonaje();
 //                case 1 -> crearPersonaje();
 //                case 1 -> crearPersonaje();
 //                case 1 -> crearPersonaje();
@@ -66,21 +66,35 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         System.out.println("Finalizando la conexion a MySQL");
     }
 
-    public static void crearPersonaje() {
-        System.out.println("");
+    public static void modificarPersonaje() {
+        System.out.println("Introduce el nombre del personaje del que quieras modificar su habilidad: ");
         String nombre = sc.nextLine();
-        System.out.println("");
+        System.out.println("Introduce la nueva habilidad del personaje: ");
+        String habilidad = sc.nextLine();
+        tieneHabilidadRepo.modificarPersonaje(nombre, habilidad);
+    }
+
+    public static void crearPersonaje() {
+        System.out.println("Introduce el nombre del personaje que quieras crear: ");
+        String nombre = sc.nextLine();
+        System.out.println("Introduce el alias del personaje que quieras crear: ");
         String alias = sc.nextLine();
         personajeRepo.crearPersonaje(new Personaje(nombre, alias));
     }
 
     public static void eliminarPersonaje() {
-        System.out.println("");
-        int id = Integer.parseInt(sc.nextLine());
-        personajeRepo.eliminarPersonaje(id);
+        System.out.println("Introduce el nombre del personaje que quieras eliminar: ");
+        String nombre = sc.nextLine();
+        personajeRepo.eliminarPersonaje(nombre);
     }
 
     private static void showMenu() {
+        System.out.println("--- SELECCIONA UNA DE LAS SISGUIENTES OPCIONES: ---");
+        System.out.println("1. Crear un personaje");
+        System.out.println("2. Eliminar un personaje");
+        System.out.println("3. Modificar un personaje");
+        System.out.println("4. ...");
+        System.out.println("---------------------------------------------------");
     }
 
 }
