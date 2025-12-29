@@ -39,7 +39,7 @@ public class PersonajeRepositorio {
     public Personaje encontrarPorId(int id) {
         try{
             Query query = session.createQuery("SELECT p FROM Personaje p WHERE p.id=:id");
-            query.setParameter(id, ":id");
+            query.setParameter(":id", id);
             return (Personaje) query.getSingleResult();
         }catch (NoResultException e){
             return null;

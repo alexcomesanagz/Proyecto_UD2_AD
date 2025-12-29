@@ -1,7 +1,4 @@
-import Entidades.Evento;
-import Entidades.HabilidadId;
-import Entidades.ParticipaId;
-import Entidades.Personaje;
+import Entidades.*;
 import Repositorios.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -50,10 +47,8 @@ public class Main {
         }while(opcion!=0);
 
         /*
-Crear, borrar (por nombre) y modificar una habilidad.
-
-
 Asignar una habilidad a un personaje.
+
 La asignación se hará a partir del nombre del personaje y el nombre de la habilidad.
 Registrar la participación de un personaje en un evento con un rol concreto y una fecha.
 Se pedirá por teclado el nombre del personaje, el nombre del evento, el rol y la fecha de participación.
@@ -87,7 +82,7 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         String nombre = sc.nextLine();
         System.out.println("Introduce la descripcion de la habilidad que quieras crear: ");
         String descripcion = sc.nextLine();
-        habilidadRepo.crearHabilidad(nombre, descripcion);
+        habilidadRepo.crearHabilidad(new Habilidad(nombre, descripcion));
     }
 
     public static void modificarPersonaje() {
@@ -117,7 +112,10 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         System.out.println("1. Crear un personaje");
         System.out.println("2. Eliminar un personaje");
         System.out.println("3. Modificar un personaje");
-        System.out.println("4. ...");
+        System.out.println("4. Crear una habilidad");
+        System.out.println("5. Eliminar una habilidad");
+        System.out.println("6. Modificar una habilidad");
+        System.out.println("7. ...");
         System.out.println("---------------------------------------------------");
     }
 
