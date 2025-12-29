@@ -1,4 +1,5 @@
 import Entidades.Evento;
+import Entidades.HabilidadId;
 import Entidades.ParticipaId;
 import Entidades.Personaje;
 import Repositorios.*;
@@ -39,9 +40,9 @@ public class Main {
                 case 1 -> crearPersonaje();
                 case 2 -> eliminarPersonaje();
                 case 3 -> modificarPersonaje();
-//                case 1 -> crearPersonaje();
-//                case 1 -> crearPersonaje();
-//                case 1 -> crearPersonaje();
+                case 4 -> crearHabilidad();
+                case 5 -> eliminarHabilidad();
+                case 6 -> modificarHabilidad();
 //                case 1 -> crearPersonaje();
                 case 0 -> System.out.println("Saliendo del programa...");
                 default -> System.out.println();
@@ -49,8 +50,9 @@ public class Main {
         }while(opcion!=0);
 
         /*
-        /Crear, borrar (por id) y modificar un personaje.
 Crear, borrar (por nombre) y modificar una habilidad.
+
+
 Asignar una habilidad a un personaje.
 La asignación se hará a partir del nombre del personaje y el nombre de la habilidad.
 Registrar la participación de un personaje en un evento con un rol concreto y una fecha.
@@ -66,12 +68,34 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         System.out.println("Finalizando la conexion a MySQL");
     }
 
-    public static void modificarPersonaje() {
-        System.out.println("Introduce el nombre del personaje del que quieras modificar su habilidad: ");
+    private static void modificarHabilidad() {
+        System.out.println("Introduce el nombre actual de la habilidad que quieras modificar: ");
+        String nombreAntiguo = sc.nextLine();
+        System.out.println("Introduce el nuevo nombre de la habilidad: ");
+        String nombreNuevo = sc.nextLine();
+        habilidadRepo.modificarPersonaje(nombreAntiguo, nombreNuevo);
+    }
+
+    private static void eliminarHabilidad() {
+        System.out.println("Introduce el nombre de la habilidad que quieras eliminar: ");
         String nombre = sc.nextLine();
-        System.out.println("Introduce la nueva habilidad del personaje: ");
-        String habilidad = sc.nextLine();
-        tieneHabilidadRepo.modificarPersonaje(nombre, habilidad);
+        habilidadRepo.eliminarHabilidad(nombre);
+    }
+
+    private static void crearHabilidad() {
+        System.out.println("Introduce el nombre de la habilidad que quieras crear: ");
+        String nombre = sc.nextLine();
+        System.out.println("Introduce la descripcion de la habilidad que quieras crear: ");
+        String descripcion = sc.nextLine();
+        habilidadRepo.crearHabilidad(nombre, descripcion);
+    }
+
+    public static void modificarPersonaje() {
+        System.out.println("Introduce el id del personaje que quieras modificar: ");
+        int id = Integer.parseInt(sc.nextLine());
+        System.out.println("Introduce el nuevo nombre del personaje: ");
+        String nombre = sc.nextLine();
+        personajeRepo.modificarPersonaje(id, nombre);
     }
 
     public static void crearPersonaje() {
@@ -83,9 +107,9 @@ Mostrar cuantos personajes tienen una habilidad concreta.
     }
 
     public static void eliminarPersonaje() {
-        System.out.println("Introduce el nombre del personaje que quieras eliminar: ");
-        String nombre = sc.nextLine();
-        personajeRepo.eliminarPersonaje(nombre);
+        System.out.println("Introduce el id del personaje que quieras eliminar: ");
+        int id = Integer.parseInt(sc.nextLine());
+        personajeRepo.eliminarPersonaje(id);
     }
 
     private static void showMenu() {

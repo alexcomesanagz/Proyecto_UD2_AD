@@ -10,5 +10,14 @@ public class HabilidadRepositorio {
         this.session = session;
     }
 
-    //funciones
+
+    public void crearHabilidad(String nombre, String descripcion) {
+        
+    }
+
+    public void eliminarHabilidad(String nombre) {
+    }
+
+    public void modificarPersonaje(String nombreAntiguo, String nombreNuevo) {
+    }
 }

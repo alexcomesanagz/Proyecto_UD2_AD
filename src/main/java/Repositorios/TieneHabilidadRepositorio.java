@@ -9,6 +9,4 @@ public class TieneHabilidadRepositorio {
         this.session = session;
     }
 
-    public void modificarPersonaje(String nombre, String habilidad) {
-    }
 }
