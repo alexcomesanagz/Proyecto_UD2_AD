@@ -16,8 +16,6 @@ public class Main {
     private static TrajeRepositorio trajeRepo;
 
     public static void main(String[] args) {
-        System.out.println("Test");
-
         Session session = HibernateUtil.get().openSession();
 
         eventoRepo = new EventoRepositorio(session);
@@ -26,8 +24,6 @@ public class Main {
         personajeRepo = new PersonajeRepositorio(session);
         tieneHabilidadRepo = new TieneHabilidadRepositorio(session);
         trajeRepo = new TrajeRepositorio(session);
-
-        //menu con funciones y pedida de datos
 
         int opcion;
         do{
@@ -40,7 +36,12 @@ public class Main {
                 case 4 -> crearHabilidad();
                 case 5 -> eliminarHabilidad();
                 case 6 -> modificarHabilidad();
-//                case 1 -> crearPersonaje();
+                case 7 -> asignarHabilidadAPersonaje();
+                case 8 -> registrarParticipacionDePersonaje();
+                case 9 -> cambiarTrajeDePersonaje();
+                case 10 -> mostrarDatosPersonaje();
+                case 11 -> mostrarPersonajesParticiparonEnEvento();
+                case 12 -> mostrarCantidadPersonajesHabilidad();
                 case 0 -> System.out.println("Saliendo del programa...");
                 default -> System.out.println();
             }
@@ -48,19 +49,44 @@ public class Main {
 
         /*
 Asignar una habilidad a un personaje.
-
 La asignación se hará a partir del nombre del personaje y el nombre de la habilidad.
+
 Registrar la participación de un personaje en un evento con un rol concreto y una fecha.
 Se pedirá por teclado el nombre del personaje, el nombre del evento, el rol y la fecha de participación.
+
 Cambiar el traje de un personaje).
 El método recibirá el nombre del personaje, la especificación del nuevo traje y el nuevo traje.
+
 Mostrar los datos de un personaje (id, nombre, alias, traje, habilidades, eventos en los que ha participado con su rol y fecha).
+
 Mostrar los personajes que participaron en un evento determinado.
+
 Mostrar cuantos personajes tienen una habilidad concreta.
          */
 
         session.close();
         System.out.println("Finalizando la conexion a MySQL");
+    }
+
+    private static void mostrarCantidadPersonajesHabilidad() {
+    }
+
+    private static void mostrarPersonajesParticiparonEnEvento() {
+
+    }
+
+    private static void mostrarDatosPersonaje() {
+
+    }
+
+    private static void cambiarTrajeDePersonaje() {
+
+    }
+
+    private static void registrarParticipacionDePersonaje() {
+    }
+
+    private static void asignarHabilidadAPersonaje() {
     }
 
     private static void modificarHabilidad() {
@@ -115,7 +141,12 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         System.out.println("4. Crear una habilidad");
         System.out.println("5. Eliminar una habilidad");
         System.out.println("6. Modificar una habilidad");
-        System.out.println("7. ...");
+        System.out.println("7. Asignar una habilidad a un personaje");
+        System.out.println("8. Registrar la participación de un personaje en un evento");
+        System.out.println("9. Cambiar el traje de un personaje");
+        System.out.println("10. Mostrar datos de un personaje");
+        System.out.println("11. Mostrar personaje que participaron en un evento");
+        System.out.println("12. Mostrar cantidad de personajes que tienen una habilidad");
         System.out.println("---------------------------------------------------");
     }
 
