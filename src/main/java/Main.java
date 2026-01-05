@@ -12,7 +12,6 @@ public class Main {
     private static HabilidadRepositorio habilidadRepo;
     private static ParticipaRepositorio participaRepo;
     private static PersonajeRepositorio personajeRepo;
-    private static TieneHabilidadRepositorio tieneHabilidadRepo;
     private static TrajeRepositorio trajeRepo;
 
     public static void main(String[] args) {
@@ -22,7 +21,6 @@ public class Main {
         habilidadRepo = new HabilidadRepositorio(session);
         participaRepo = new ParticipaRepositorio(session);
         personajeRepo = new PersonajeRepositorio(session);
-        tieneHabilidadRepo = new TieneHabilidadRepositorio(session);
         trajeRepo = new TrajeRepositorio(session);
 
         int opcion;
@@ -87,6 +85,14 @@ Mostrar cuantos personajes tienen una habilidad concreta.
     }
 
     private static void asignarHabilidadAPersonaje() {
+//        Asignar una habilidad a un personaje.
+//        La asignación se hará a partir del nombre del personaje y el nombre de la habilidad.
+        System.out.println("Introduce el nombre del personaje que quieras asignarle una nueva habilidad: ");
+        String nombrePersonaje = sc.nextLine();
+        System.out.println("Introduce el nombre de la nueva habilidad a la que quieras asignarle un nuevo personaje: ");
+        String nombreHabilidad = sc.nextLine();
+
+//        Personaje.setHabilidadBidireccional(habilidadRepo.conseguirHabilidadPorNombre(nombreHabiliad));
     }
 
     private static void modificarHabilidad() {

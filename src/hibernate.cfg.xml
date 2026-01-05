@@ -14,7 +14,6 @@
         <mapping class = "Entidades.Participa" />
         <mapping class = "Entidades.Evento" />
         <mapping class = "Entidades.Traje" />
-        <mapping class = "Entidades.TieneHabilidad" />
         <mapping class = "Entidades.Habilidad" />
 
     </session-factory>

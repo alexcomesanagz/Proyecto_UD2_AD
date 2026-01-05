@@ -28,8 +28,13 @@ public class Personaje {
     @JoinColumn(name = "id_traje", unique = true)
     private Traje traje;
 
-    @OneToMany(mappedBy = "personaje")
-    private List<TieneHabilidad> habilidades;
+    @ManyToMany
+    @JoinTable(
+            name = "Personaje_Habilidad",
+            joinColumns = @JoinColumn(name = "idpersonaje"),
+            inverseJoinColumns = @JoinColumn(name = "idhabilidad")
+    )
+    private List<Habilidad> listaHabilidades;
 
     @OneToMany(mappedBy = "personaje")
     private List<Participa> participantes;
@@ -37,5 +42,10 @@ public class Personaje {
     public void setTrajeBidireccional(Traje traje){
         this.traje = traje;
         traje.setPersonaje(this);
+    }
+
+    public void setHabilidadBidireccional(Habilidad habilidad){
+        listaHabilidades.add(habilidad);
+        habilidad.addListaPersonajes(this);
     }
 }

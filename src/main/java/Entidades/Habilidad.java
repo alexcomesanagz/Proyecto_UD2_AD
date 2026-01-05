@@ -22,6 +22,9 @@ public class Habilidad {
     @NonNull
     private String descripcion;
 
-    @OneToMany(mappedBy = "habilidad")
-    private List<TieneHabilidad> habilidades;
+    @ManyToMany(mappedBy = "listaHabilidades")
+    private List<Personaje> listaPersonajes;
+    public void addListaPersonajes(Personaje personaje){
+        this.listaPersonajes.add(personaje);
+    }
 }
