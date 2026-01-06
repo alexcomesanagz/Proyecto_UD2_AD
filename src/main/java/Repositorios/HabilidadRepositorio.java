@@ -15,6 +15,9 @@ public class HabilidadRepositorio {
 
     public void crearHabilidad(Habilidad habilidad) {
         Transaction trx = session.beginTransaction();
+        Query query = session.createQuery("SELECT MAX(id) FROM Habilidad h");
+        int id = 1+ (Integer) query.getSingleResult();
+        habilidad.setId(id);
         session.persist(habilidad);
         trx.commit();
         System.out.println("Habilidad creada con éxito.");
@@ -23,7 +26,7 @@ public class HabilidadRepositorio {
     public Habilidad encontrarHabilidadPorString(String nombre){
         try{
             Query query = session.createQuery("SELECT h FROM Habilidad h WHERE h.nombre=:nombre");
-            query.setParameter(":nombre", nombre);
+            query.setParameter("nombre", nombre);
             return (Habilidad) query.getSingleResult();
         }catch (NoResultException e){
             return null;
@@ -54,5 +57,11 @@ public class HabilidadRepositorio {
             trx.rollback();
             System.out.println("Habilidad con el ID proporcionado no existente.");
         }
+    }
+
+    public void guardarCambios(Habilidad h) {
+        Transaction trx = session.beginTransaction();
+        session.merge(h);
+        trx.commit();
     }
 }

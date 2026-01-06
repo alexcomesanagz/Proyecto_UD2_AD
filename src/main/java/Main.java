@@ -3,6 +3,8 @@ import Repositorios.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.time.LocalDate;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
@@ -46,15 +48,6 @@ public class Main {
         }while(opcion!=0);
 
         /*
-Asignar una habilidad a un personaje.
-La asignación se hará a partir del nombre del personaje y el nombre de la habilidad.
-
-Registrar la participación de un personaje en un evento con un rol concreto y una fecha.
-Se pedirá por teclado el nombre del personaje, el nombre del evento, el rol y la fecha de participación.
-
-Cambiar el traje de un personaje).
-El método recibirá el nombre del personaje, la especificación del nuevo traje y el nuevo traje.
-
 Mostrar los datos de un personaje (id, nombre, alias, traje, habilidades, eventos en los que ha participado con su rol y fecha).
 
 Mostrar los personajes que participaron en un evento determinado.
@@ -74,25 +67,73 @@ Mostrar cuantos personajes tienen una habilidad concreta.
     }
 
     private static void mostrarDatosPersonaje() {
-
+        System.out.println("Introduce la id del personaje, del cual quieras saber sus datos:");
+        int id = Integer.parseInt(sc.nextLine());
+        Personaje p = personajeRepo.encontrarPorId(id);
+        System.out.println(p);
     }
 
     private static void cambiarTrajeDePersonaje() {
-
+        System.out.println("Introduce el nombre del personaje al que se le quiera cambiar el traje:");
+        String nombrePersonaje = sc.nextLine();
+        System.out.println("Introduce la especificación del nuevo traje:");
+        String especificacion = sc.nextLine();
+        Traje traje = new Traje(especificacion);
+        trajeRepo.crearTraje(traje);
+        Personaje p = personajeRepo.encontrarPorNombre(nombrePersonaje);
+        if(p == null){
+            System.out.println("El personaje no existe");
+            return;
+        }
+        p.setTraje(traje);
+        personajeRepo.guardarCambios(p);
+        System.out.println("Traje cambiado con éxito.");
     }
 
     private static void registrarParticipacionDePersonaje() {
+        System.out.println("Introduce el nombre del personaje a participar en el evento:");
+        String nombrePersonaje = sc.nextLine();
+        System.out.println("Introduce el nombre del evento en el que participa el personaje:");
+        String nombreEvento = sc.nextLine();
+        System.out.println("Introduce el rol del personaje:");
+        String rolPersonaje = sc.nextLine();
+        System.out.println("Introduce la fecha del evento:");
+        LocalDate fechaEvento = LocalDate.parse(sc.nextLine());
+
+        Evento e = eventoRepo.encontrarPorNombre(nombreEvento);
+        if(e == null){
+            System.out.println("El evento no existe");
+            return;
+        }
+        Personaje p = personajeRepo.encontrarPorNombre(nombrePersonaje);
+        if(p == null){
+            System.out.println("El personaje no existe");
+            return;
+        }
+        ParticipaId participaId = new ParticipaId(p.getId(), e.getId());
+        Participa participa = new Participa(participaId, e, p, fechaEvento , rolPersonaje);
+        participaRepo.guardar(participa);
+        System.out.println("Participación del personaje realizada con éxito.");
     }
 
     private static void asignarHabilidadAPersonaje() {
-//        Asignar una habilidad a un personaje.
-//        La asignación se hará a partir del nombre del personaje y el nombre de la habilidad.
         System.out.println("Introduce el nombre del personaje que quieras asignarle una nueva habilidad: ");
         String nombrePersonaje = sc.nextLine();
         System.out.println("Introduce el nombre de la nueva habilidad a la que quieras asignarle un nuevo personaje: ");
         String nombreHabilidad = sc.nextLine();
-
-//        Personaje.setHabilidadBidireccional(habilidadRepo.conseguirHabilidadPorNombre(nombreHabiliad));
+        Personaje p = personajeRepo.encontrarPorNombre(nombrePersonaje);
+        if(p == null){
+            System.out.println("El personaje no existe");
+            return;
+        }
+        Habilidad h = habilidadRepo.encontrarHabilidadPorString(nombreHabilidad);
+        if(h == null){
+            System.out.println("La habilidad no existe");
+            return;
+        }
+        p.setHabilidadBidireccional(h);
+        personajeRepo.guardarCambios(p);
+        System.out.println("Habilidad asignada al personaje con éxito.");
     }
 
     private static void modificarHabilidad() {

@@ -33,4 +33,11 @@ public class Participa {
     private LocalDate fecha;
     @Column(name = "rol")
     private String rol;
+
+    @Override
+    public String toString(){
+        return evento +
+                "\nRol: " + rol +
+                "\nFecha: " + fecha ;
+    }
 }

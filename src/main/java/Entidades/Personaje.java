@@ -14,7 +14,7 @@ import java.util.List;
 public class Personaje {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
@@ -31,8 +31,8 @@ public class Personaje {
     @ManyToMany
     @JoinTable(
             name = "Personaje_Habilidad",
-            joinColumns = @JoinColumn(name = "idpersonaje"),
-            inverseJoinColumns = @JoinColumn(name = "idhabilidad")
+            joinColumns = @JoinColumn(name = "id_personaje"),
+            inverseJoinColumns = @JoinColumn(name = "id_habilidad")
     )
     private List<Habilidad> listaHabilidades;
 
@@ -47,5 +47,19 @@ public class Personaje {
     public void setHabilidadBidireccional(Habilidad habilidad){
         listaHabilidades.add(habilidad);
         habilidad.addListaPersonajes(this);
+    }
+
+    @Override
+    public String toString(){
+        return "ID: " + id +
+                "\nNombre: " + nombre +
+                "\nAlias: " + alias +
+                "\n------------------------------------------" +
+                "\nTraje: " + traje +
+                "\n------------------------------------------" +
+                "\nHabilidades: " + listaHabilidades +
+                "\n------------------------------------------" +
+                "\nEventos: " + participantes +
+                "\n------------------------------------------";
     }
 }

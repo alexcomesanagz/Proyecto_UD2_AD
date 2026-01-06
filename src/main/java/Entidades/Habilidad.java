@@ -14,7 +14,7 @@ import java.util.List;
 public class Habilidad {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NonNull
@@ -26,5 +26,12 @@ public class Habilidad {
     private List<Personaje> listaPersonajes;
     public void addListaPersonajes(Personaje personaje){
         this.listaPersonajes.add(personaje);
+    }
+
+    @Override
+    public String toString(){
+        return "\nID: " + id +
+                "\nNombre: " + nombre +
+                "\nDescripción: " + descripcion ;
     }
 }

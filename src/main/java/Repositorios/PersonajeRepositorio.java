@@ -3,6 +3,8 @@ package Repositorios;
 
 import Entidades.Personaje;
 import jakarta.persistence.NoResultException;
+import org.hibernate.NonUniqueObjectException;
+import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -17,6 +19,9 @@ public class PersonajeRepositorio {
 
     public void crearPersonaje(Personaje personaje){
         Transaction trx = session.beginTransaction();
+        Query query = session.createQuery("SELECT MAX(id) FROM Personaje p");
+        int id = 1+ (Integer) query.getSingleResult();
+        personaje.setId(id);
         session.persist(personaje);
         trx.commit();
         System.out.println("Personaje creado con éxito.");
@@ -36,10 +41,20 @@ public class PersonajeRepositorio {
 
     }
 
+    public Personaje encontrarPorNombre(String nombre) {
+        try{
+            Query query = session.createQuery("SELECT p FROM Personaje p WHERE p.nombre=:nombre");
+            query.setParameter("nombre", nombre);
+            return (Personaje) query.getSingleResult();
+        }catch (NoResultException e){
+            return null;
+        }
+    }
+
     public Personaje encontrarPorId(int id) {
         try{
             Query query = session.createQuery("SELECT p FROM Personaje p WHERE p.id=:id");
-            query.setParameter(":id", id);
+            query.setParameter("id", id);
             return (Personaje) query.getSingleResult();
         }catch (NoResultException e){
             return null;
@@ -56,6 +71,18 @@ public class PersonajeRepositorio {
         }else{
             trx.rollback();
             System.out.println("Personaje no encontrado.");
+        }
+    }
+
+    public void guardarCambios(Personaje p) {
+        Transaction trx = null;
+        try{
+            trx = session.beginTransaction();
+            session.merge(p);
+            trx.commit();
+        }catch (Exception e){
+            if(trx != null) trx.rollback();
+            throw e;
         }
     }
 }
