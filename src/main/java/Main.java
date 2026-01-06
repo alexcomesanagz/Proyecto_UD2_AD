@@ -48,8 +48,6 @@ public class Main {
         }while(opcion!=0);
 
         /*
-Mostrar los datos de un personaje (id, nombre, alias, traje, habilidades, eventos en los que ha participado con su rol y fecha).
-
 Mostrar los personajes que participaron en un evento determinado.
 
 Mostrar cuantos personajes tienen una habilidad concreta.
