@@ -64,4 +64,11 @@ public class HabilidadRepositorio {
         session.merge(h);
         trx.commit();
     }
+
+    public void cantidadPersonajesPorHabilidad(String nombre) {
+        Query query = session.createQuery("SELECT COUNT(p) FROM Personaje p JOIN p.listaHabilidades h WHERE h.nombre = :nombre");
+        query.setParameter("nombre", nombre);
+        Long cantidad = (Long) query.getSingleResult();
+        System.out.println("Cantidad de personajes: " + cantidad);
+    }
 }

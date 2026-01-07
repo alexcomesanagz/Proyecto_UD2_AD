@@ -48,8 +48,6 @@ public class Main {
         }while(opcion!=0);
 
         /*
-Mostrar los personajes que participaron en un evento determinado.
-
 Mostrar cuantos personajes tienen una habilidad concreta.
          */
 
@@ -58,16 +56,32 @@ Mostrar cuantos personajes tienen una habilidad concreta.
     }
 
     private static void mostrarCantidadPersonajesHabilidad() {
+        System.out.println("Introduce el nombre de la habilidad, de la cual quieras saber la cantidad de personajes que la poseen:");
+        String nombre = sc.nextLine();
+        habilidadRepo.cantidadPersonajesPorHabilidad(nombre);
     }
 
     private static void mostrarPersonajesParticiparonEnEvento() {
-
+        System.out.println("Introduce el nombre del evento, del cual quieras saber los personajes:");
+        String nombre = sc.nextLine();
+        Evento e = eventoRepo.encontrarPorNombre(nombre);
+        if(e == null){
+            System.out.println("No existe ese evento");
+            return;
+        }
+        for(Participa p : e.getParticipantes()){
+            System.out.println(p.getPersonaje());
+        }
     }
 
     private static void mostrarDatosPersonaje() {
         System.out.println("Introduce la id del personaje, del cual quieras saber sus datos:");
         int id = Integer.parseInt(sc.nextLine());
         Personaje p = personajeRepo.encontrarPorId(id);
+        if(p == null){
+            System.out.println("No existe el personaje con esa ID.");
+            return;
+        }
         System.out.println(p);
     }
 
@@ -140,12 +154,14 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         System.out.println("Introduce el nuevo nombre de la habilidad: ");
         String nombreNuevo = sc.nextLine();
         habilidadRepo.modificarPersonaje(nombreAntiguo, nombreNuevo);
+        System.out.println("Habilidad modificada con éxito.");
     }
 
     private static void eliminarHabilidad() {
         System.out.println("Introduce el nombre de la habilidad que quieras eliminar: ");
         String nombre = sc.nextLine();
         habilidadRepo.eliminarHabilidad(nombre);
+        System.out.println("Habilidad eliminada con éxito.");
     }
 
     private static void crearHabilidad() {
@@ -154,6 +170,7 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         System.out.println("Introduce la descripcion de la habilidad que quieras crear: ");
         String descripcion = sc.nextLine();
         habilidadRepo.crearHabilidad(new Habilidad(nombre, descripcion));
+        System.out.println("Habilidad creada con éxito.");
     }
 
     public static void modificarPersonaje() {
@@ -162,6 +179,7 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         System.out.println("Introduce el nuevo nombre del personaje: ");
         String nombre = sc.nextLine();
         personajeRepo.modificarPersonaje(id, nombre);
+        System.out.println("Personaje modificado con éxito.");
     }
 
     public static void crearPersonaje() {
@@ -170,12 +188,14 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         System.out.println("Introduce el alias del personaje que quieras crear: ");
         String alias = sc.nextLine();
         personajeRepo.crearPersonaje(new Personaje(nombre, alias));
+        System.out.println("Personaje creado con éxito.");
     }
 
     public static void eliminarPersonaje() {
         System.out.println("Introduce el id del personaje que quieras eliminar: ");
         int id = Integer.parseInt(sc.nextLine());
         personajeRepo.eliminarPersonaje(id);
+        System.out.println("Personaje eliminado con éxito.");
     }
 
     private static void showMenu() {
@@ -194,5 +214,4 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         System.out.println("12. Mostrar cantidad de personajes que tienen una habilidad");
         System.out.println("---------------------------------------------------");
     }
-
 }
