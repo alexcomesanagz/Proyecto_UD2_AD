@@ -3,11 +3,11 @@ package Repositorios;
 
 import Entidades.Personaje;
 import jakarta.persistence.NoResultException;
-import org.hibernate.NonUniqueObjectException;
-import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+
+import java.util.List;
 
 
 public class PersonajeRepositorio {
@@ -31,6 +31,11 @@ public class PersonajeRepositorio {
         Transaction trx = session.beginTransaction();
         Personaje personaje = encontrarPorId(id);
         if(personaje != null){
+
+            if(personaje.getTraje() != null){
+                personaje.getTraje().setPersonaje(null);
+            }
+
             session.remove(personaje);
             trx.commit();
             System.out.println("Personaje eliminado con éxito.");
@@ -84,5 +89,20 @@ public class PersonajeRepositorio {
             if(trx != null) trx.rollback();
             throw e;
         }
+    }
+
+    public void mostrarIdsYNombre() {
+        Query query = session.createQuery("SELECT p FROM Personaje p");
+        List<Personaje> listaPersonajes = query.getResultList();
+        if (listaPersonajes.isEmpty()) {
+            System.out.println("No existen personajes.");
+            return;
+        }
+
+        System.out.println("--- IDs de personajes: ---");
+        for (Personaje personaje : listaPersonajes) {
+            System.out.println("ID: " + personaje.getId() + " | Nombre: " + personaje.getNombre());
+        }
+        System.out.println("---------------------------");
     }
 }

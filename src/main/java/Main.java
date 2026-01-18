@@ -1,10 +1,8 @@
 import Entidades.*;
 import Repositorios.*;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import java.time.LocalDate;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
@@ -26,10 +24,10 @@ public class Main {
         trajeRepo = new TrajeRepositorio(session);
 
         int opcion;
-        do{
+        do {
             showMenu();
             opcion = Integer.parseInt(sc.nextLine());
-            switch (opcion){
+            switch (opcion) {
                 case 1 -> crearPersonaje();
                 case 2 -> eliminarPersonaje();
                 case 3 -> modificarPersonaje();
@@ -45,40 +43,39 @@ public class Main {
                 case 0 -> System.out.println("Saliendo del programa...");
                 default -> System.out.println();
             }
-        }while(opcion!=0);
-
-        /*
-Mostrar cuantos personajes tienen una habilidad concreta.
-         */
+        } while (opcion != 0);
 
         session.close();
         System.out.println("Finalizando la conexion a MySQL");
     }
 
     private static void mostrarCantidadPersonajesHabilidad() {
-        System.out.println("Introduce el nombre de la habilidad, de la cual quieras saber la cantidad de personajes que la poseen:");
-        String nombre = sc.nextLine();
-        habilidadRepo.cantidadPersonajesPorHabilidad(nombre);
+        habilidadRepo.mostrarIdsYNombre();
+        System.out.println("Introduce el ID de la habilidad:");
+        int id =Integer.parseInt(sc.nextLine());
+        habilidadRepo.cantidadPersonajesPorHabilidad(id);
     }
 
     private static void mostrarPersonajesParticiparonEnEvento() {
+        eventoRepo.mostrarIdsYNombre();
         System.out.println("Introduce el nombre del evento, del cual quieras saber los personajes:");
         String nombre = sc.nextLine();
         Evento e = eventoRepo.encontrarPorNombre(nombre);
-        if(e == null){
+        if (e == null) {
             System.out.println("No existe ese evento");
             return;
         }
-        for(Participa p : e.getParticipantes()){
-            System.out.println(p.getPersonaje());
+        for (Participa p : e.getParticipantes()) {
+            System.out.println(p.getPersonaje().getNombre());
         }
     }
 
     private static void mostrarDatosPersonaje() {
+        personajeRepo.mostrarIdsYNombre();
         System.out.println("Introduce la id del personaje, del cual quieras saber sus datos:");
         int id = Integer.parseInt(sc.nextLine());
         Personaje p = personajeRepo.encontrarPorId(id);
-        if(p == null){
+        if (p == null) {
             System.out.println("No existe el personaje con esa ID.");
             return;
         }
@@ -86,25 +83,46 @@ Mostrar cuantos personajes tienen una habilidad concreta.
     }
 
     private static void cambiarTrajeDePersonaje() {
+        personajeRepo.mostrarIdsYNombre();
         System.out.println("Introduce el nombre del personaje al que se le quiera cambiar el traje:");
         String nombrePersonaje = sc.nextLine();
-        System.out.println("Introduce la especificación del nuevo traje:");
-        String especificacion = sc.nextLine();
-        Traje traje = new Traje(especificacion);
-        trajeRepo.crearTraje(traje);
+
         Personaje p = personajeRepo.encontrarPorNombre(nombrePersonaje);
-        if(p == null){
+        if (p == null) {
             System.out.println("El personaje no existe");
             return;
         }
+
+        System.out.println("Introduce la especificación del nuevo traje:");
+        String especificacion = sc.nextLine();
+
+        Traje traje = trajeRepo.encontrarPorEspecificacion(especificacion);
+
+        if (traje == null) {
+            traje = new Traje(especificacion);
+            trajeRepo.crearTraje(traje);
+        } else {
+            if (trajeRepo.estaAsignadoOtro(traje, p)) {
+                System.out.println("Ese traje ya está asignado a otro personaje.");
+                return;
+            }
+        }
+
+        if (p.getTraje() != null && p.getTraje().getEspecificacion().equals(especificacion)) {
+            System.out.println("El personaje ya tiene asignado ese traje.");
+            return;
+        }
+
         p.setTraje(traje);
         personajeRepo.guardarCambios(p);
         System.out.println("Traje cambiado con éxito.");
     }
 
     private static void registrarParticipacionDePersonaje() {
+        personajeRepo.mostrarIdsYNombre();
         System.out.println("Introduce el nombre del personaje a participar en el evento:");
         String nombrePersonaje = sc.nextLine();
+        eventoRepo.mostrarIdsYNombre();
         System.out.println("Introduce el nombre del evento en el que participa el personaje:");
         String nombreEvento = sc.nextLine();
         System.out.println("Introduce el rol del personaje:");
@@ -113,33 +131,35 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         LocalDate fechaEvento = LocalDate.parse(sc.nextLine());
 
         Evento e = eventoRepo.encontrarPorNombre(nombreEvento);
-        if(e == null){
+        if (e == null) {
             System.out.println("El evento no existe");
             return;
         }
         Personaje p = personajeRepo.encontrarPorNombre(nombrePersonaje);
-        if(p == null){
+        if (p == null) {
             System.out.println("El personaje no existe");
             return;
         }
         ParticipaId participaId = new ParticipaId(p.getId(), e.getId());
-        Participa participa = new Participa(participaId, e, p, fechaEvento , rolPersonaje);
+        Participa participa = new Participa(participaId, e, p, fechaEvento, rolPersonaje);
         participaRepo.guardar(participa);
         System.out.println("Participación del personaje realizada con éxito.");
     }
 
     private static void asignarHabilidadAPersonaje() {
-        System.out.println("Introduce el nombre del personaje que quieras asignarle una nueva habilidad: ");
+        personajeRepo.mostrarIdsYNombre();
+        System.out.println("Introduce el nombre del personaje: ");
         String nombrePersonaje = sc.nextLine();
-        System.out.println("Introduce el nombre de la nueva habilidad a la que quieras asignarle un nuevo personaje: ");
+        habilidadRepo.mostrarIdsYNombre();
+        System.out.println("Introduce el nombre de la nueva habilidad del personaje: ");
         String nombreHabilidad = sc.nextLine();
         Personaje p = personajeRepo.encontrarPorNombre(nombrePersonaje);
-        if(p == null){
+        if (p == null) {
             System.out.println("El personaje no existe");
             return;
         }
         Habilidad h = habilidadRepo.encontrarHabilidadPorString(nombreHabilidad);
-        if(h == null){
+        if (h == null) {
             System.out.println("La habilidad no existe");
             return;
         }
@@ -149,19 +169,19 @@ Mostrar cuantos personajes tienen una habilidad concreta.
     }
 
     private static void modificarHabilidad() {
+        habilidadRepo.mostrarIdsYNombre();
         System.out.println("Introduce el nombre actual de la habilidad que quieras modificar: ");
         String nombreAntiguo = sc.nextLine();
         System.out.println("Introduce el nuevo nombre de la habilidad: ");
         String nombreNuevo = sc.nextLine();
         habilidadRepo.modificarPersonaje(nombreAntiguo, nombreNuevo);
-        System.out.println("Habilidad modificada con éxito.");
     }
 
     private static void eliminarHabilidad() {
+        habilidadRepo.mostrarIdsYNombre();
         System.out.println("Introduce el nombre de la habilidad que quieras eliminar: ");
         String nombre = sc.nextLine();
         habilidadRepo.eliminarHabilidad(nombre);
-        System.out.println("Habilidad eliminada con éxito.");
     }
 
     private static void crearHabilidad() {
@@ -170,16 +190,15 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         System.out.println("Introduce la descripcion de la habilidad que quieras crear: ");
         String descripcion = sc.nextLine();
         habilidadRepo.crearHabilidad(new Habilidad(nombre, descripcion));
-        System.out.println("Habilidad creada con éxito.");
     }
 
     public static void modificarPersonaje() {
+        personajeRepo.mostrarIdsYNombre();
         System.out.println("Introduce el id del personaje que quieras modificar: ");
         int id = Integer.parseInt(sc.nextLine());
         System.out.println("Introduce el nuevo nombre del personaje: ");
         String nombre = sc.nextLine();
         personajeRepo.modificarPersonaje(id, nombre);
-        System.out.println("Personaje modificado con éxito.");
     }
 
     public static void crearPersonaje() {
@@ -188,14 +207,13 @@ Mostrar cuantos personajes tienen una habilidad concreta.
         System.out.println("Introduce el alias del personaje que quieras crear: ");
         String alias = sc.nextLine();
         personajeRepo.crearPersonaje(new Personaje(nombre, alias));
-        System.out.println("Personaje creado con éxito.");
     }
 
     public static void eliminarPersonaje() {
+        personajeRepo.mostrarIdsYNombre();
         System.out.println("Introduce el id del personaje que quieras eliminar: ");
         int id = Integer.parseInt(sc.nextLine());
         personajeRepo.eliminarPersonaje(id);
-        System.out.println("Personaje eliminado con éxito.");
     }
 
     private static void showMenu() {

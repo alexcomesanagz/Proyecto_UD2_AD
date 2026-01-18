@@ -2,9 +2,12 @@ package Repositorios;
 
 
 import Entidades.Evento;
+import Entidades.Personaje;
 import jakarta.persistence.NoResultException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+
+import java.util.List;
 
 public class EventoRepositorio {
     Session session;
@@ -23,5 +26,19 @@ public class EventoRepositorio {
         }
     }
 
-    //funciones
+    public void mostrarIdsYNombre() {
+        Query query = session.createQuery("SELECT e FROM Evento e");
+        List<Evento> listaEventos = query.getResultList();
+        if (listaEventos.isEmpty()) {
+            System.out.println("No existen eventos.");
+            return;
+        }
+
+        System.out.println("--- IDs de eventos: ---");
+        for (Evento evento : listaEventos) {
+            System.out.println("ID: " + evento.getId() + " | Nombre: " + evento.getNombre());
+        }
+        System.out.println("---------------------------");
+    }
+
 }

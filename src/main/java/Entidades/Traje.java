@@ -18,7 +18,7 @@ public class Traje {
     @NonNull
     private String especificacion;
 
-    @OneToOne(mappedBy = "traje")
+    @OneToOne(mappedBy = "traje", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Personaje personaje;
 
     @Override

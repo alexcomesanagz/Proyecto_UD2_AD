@@ -28,7 +28,7 @@ public class Personaje {
     @JoinColumn(name = "id_traje", unique = true)
     private Traje traje;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "Personaje_Habilidad",
             joinColumns = @JoinColumn(name = "id_personaje"),
@@ -36,7 +36,7 @@ public class Personaje {
     )
     private List<Habilidad> listaHabilidades;
 
-    @OneToMany(mappedBy = "personaje")
+    @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Participa> participantes;
 
     public void setTrajeBidireccional(Traje traje){

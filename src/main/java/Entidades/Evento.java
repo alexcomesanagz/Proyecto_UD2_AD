@@ -21,7 +21,7 @@ public class Evento {
     private String nombre;
     private String lugar;
 
-    @OneToMany(mappedBy = "evento")
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Participa> participantes;
 
     @Override

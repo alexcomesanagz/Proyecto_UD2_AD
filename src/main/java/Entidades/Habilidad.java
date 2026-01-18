@@ -22,7 +22,7 @@ public class Habilidad {
     @NonNull
     private String descripcion;
 
-    @ManyToMany(mappedBy = "listaHabilidades")
+    @ManyToMany(mappedBy = "listaHabilidades", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Personaje> listaPersonajes;
     public void addListaPersonajes(Personaje personaje){
         this.listaPersonajes.add(personaje);

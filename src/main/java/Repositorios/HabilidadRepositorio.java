@@ -1,10 +1,13 @@
 package Repositorios;
 
 import Entidades.Habilidad;
+import Entidades.Personaje;
 import jakarta.persistence.NoResultException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+
+import java.util.List;
 
 public class HabilidadRepositorio {
     Session session;
@@ -42,7 +45,7 @@ public class HabilidadRepositorio {
             System.out.println("La habilidad se ha eliminado con éxito.");
         }else{
             trx.rollback();
-            System.out.println("No se ha encontrado la habilidad con la ID proporcionada.");
+            System.out.println("No se ha encontrado la habilidad con el nombre proporcionado.");
         }
     }
 
@@ -55,7 +58,7 @@ public class HabilidadRepositorio {
             System.out.println("Habilidad modificada con éxito.");
         }else{
             trx.rollback();
-            System.out.println("Habilidad con el ID proporcionado no existente.");
+            System.out.println("Habilidad con el nombre proporcionado no existente.");
         }
     }
 
@@ -65,10 +68,25 @@ public class HabilidadRepositorio {
         trx.commit();
     }
 
-    public void cantidadPersonajesPorHabilidad(String nombre) {
-        Query query = session.createQuery("SELECT COUNT(p) FROM Personaje p JOIN p.listaHabilidades h WHERE h.nombre = :nombre");
-        query.setParameter("nombre", nombre);
+    public void cantidadPersonajesPorHabilidad(int id) {
+        Query query = session.createQuery("SELECT COUNT(p) FROM Personaje p JOIN p.listaHabilidades h WHERE h.id = :id");
+        query.setParameter("id", id);
         Long cantidad = (Long) query.getSingleResult();
         System.out.println("Cantidad de personajes: " + cantidad);
+    }
+
+    public void mostrarIdsYNombre() {
+        Query query = session.createQuery("SELECT h FROM Habilidad h");
+        List<Habilidad> listaHabilidades = query.getResultList();
+        if (listaHabilidades.isEmpty()) {
+            System.out.println("No existen habilidades.");
+            return;
+        }
+
+        System.out.println("--- IDs de habilidades: ---");
+        for (Habilidad habilidad : listaHabilidades) {
+            System.out.println("ID: " + habilidad.getId() + " | Nombre: " + habilidad.getNombre());
+        }
+        System.out.println("---------------------------");
     }
 }
